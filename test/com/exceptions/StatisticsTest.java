@@ -32,7 +32,7 @@ public class StatisticsTest {
     }
 
     @Test
-    public void given2StudentsAddedToAGroup_whenGetStudents_thenListHasTwoElements() {
+    public void given2StudentsAddedToAGroup_whenGetStudents_thenListHasTwoElements() throws GroupOccupancyExceededException {
         // Given:
         Student juan = new Student("Juan", "97249");
         Student ana = new Student("Ana", "98257");
@@ -50,7 +50,7 @@ public class StatisticsTest {
     }
 
     @Test(expected = GroupOccupancyExceededException.class)
-    public void givenOccupancyOf3_when4StudentsAdded_thenExceptionIsThrown() {
+    public void givenOccupancyOf3_when4StudentsAdded_thenExceptionIsThrown() throws GroupOccupancyExceededException {
         // Given:
         Student juan = new Student("Juan", "97249");
         Student ana = new Student("Ana", "98257");
@@ -68,12 +68,13 @@ public class StatisticsTest {
         // Then: GroupOccupancyExceededException was thrown
     }
 
-    @Test(expected = GroupOccupancyExceededException.class)
-    public void givenOccupancyOf3_whenStudentsDuplicatedAdded_thenStudentIsNotDuplicatedOnGroup() {
+    @Test
+    public void givenOccupancyOf3_whenStudentsDuplicatedAdded_thenStudentIsNotDuplicatedOnGroup() throws GroupOccupancyExceededException {
         // Given:
         Student juan = new Student("Juan", "97249");
         Student ana = new Student("Ana", "98257");
-        Student mario = new Student("Juan", "98249");
+        Student mario = new Student("Mario", "98249");
+        Student ana2ndObject = new Student("Lucia", "98257");
         Group group = new Group(3);
 
         group.add(juan);
@@ -85,12 +86,13 @@ public class StatisticsTest {
 
         // Then:
         List<Student> studentList = group.getStudents();
+        studentList.forEach(System.out::println);
         assertEquals("Students in group should be 3", 3, studentList.size());
         assertEquals("Availability for group should be 0", 0, group.availability());
     }
 
     @Test
-    public void givenStudentsWithGrade_whenAverageIsRequested_thenAverageIsRetrieved() {
+    public void givenStudentsWithGrade_whenAverageIsRequested_thenAverageIsRetrieved() throws GroupOccupancyExceededException {
         // Given:
         Student juan = new Student("Juan", "97249");
         Student ana = new Student("Ana", "98257");
@@ -113,7 +115,7 @@ public class StatisticsTest {
     }
 
     @Test(expected = MissedGradeException.class)
-    public void givenNotAllStudentsWithGrade_whenAverageIsRequested_thenExceptionIsThrown() {
+    public void givenNotAllStudentsWithGrade_whenAverageIsRequested_thenExceptionIsThrown() throws GroupOccupancyExceededException {
         // Given:
         Student juan = new Student("Juan", "97249");
         Student ana = new Student("Ana", "98257");
